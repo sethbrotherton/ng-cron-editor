@@ -1,0 +1,12 @@
+{
+  "name": "material-cron-jobs",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^10.1.4",
+    "@angular/core": "^10.1.4",
+    "@angular/material": "^10.2.3"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}
