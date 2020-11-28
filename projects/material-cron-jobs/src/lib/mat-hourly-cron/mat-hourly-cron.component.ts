@@ -1,8 +1,8 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {UtilsService} from "../services/utils.service";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {BehaviorSubject} from "rxjs";
-import {distinctUntilChanged, takeLast, takeUntil} from "rxjs/operators";
+import {UtilsService} from '../services/utils.service';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {BehaviorSubject} from 'rxjs';
+import {distinctUntilChanged, takeLast, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'lib-mat-hourly-cron',
@@ -21,7 +21,7 @@ export class MatHourlyCronComponent implements OnInit, OnDestroy {
   constructor(private utilsService: UtilsService) { }
 
   ngOnInit(): void {
-    this.minutes = this.utilsService.range(60);
+    // this.minutes = this.utilsService.range(60);
 
     // this.hourlyCronForm = new FormControl(this.hourlyCron);
 

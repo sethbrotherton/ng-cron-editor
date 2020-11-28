@@ -5,17 +5,18 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
+import { MatMinuteCronComponent } from './mat-minute-cron/mat-minute-cron.component';
 
 
 
 @NgModule({
-  declarations: [MaterialCronJobsComponent, MatHourlyCronComponent],
+  declarations: [MaterialCronJobsComponent, MatHourlyCronComponent, MatMinuteCronComponent],
   imports: [
     MatFormFieldModule,
     MatSelectModule,
     CommonModule,
     ReactiveFormsModule
   ],
-  exports: [MaterialCronJobsComponent, MatHourlyCronComponent]
+  exports: [MaterialCronJobsComponent, MatHourlyCronComponent, MatMinuteCronComponent]
 })
 export class MaterialCronJobsModule { }

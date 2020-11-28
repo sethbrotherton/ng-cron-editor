@@ -1,0 +1,64 @@
+<form [formGroup]="minuteCronForm">
+  <div class="flex-container">
+    <ng-container>
+      <mat-form-field>
+        <mat-label>Minutes between</mat-label>
+        <mat-select formControlName="minuteCronControl" (selectionChange)="formatMinutes($event)">
+          <mat-option
+            *ngFor="let minute of minutes"
+            [value]="minute.value"
+          >
+            {{minute.friendly}}
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="cronOptions.showHints">Select how many minutes between jobs</mat-hint>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="cronOptions.includeHours">
+      <mat-form-field>
+        <mat-label>Hours</mat-label>
+        <mat-select formControlName="hoursCronControl" (selectionChange)="formatHours($event)" multiple>
+          <mat-option
+            *ngFor="let hour of hours"
+            [value]="hour.value"
+          >
+            {{hour.friendly}}
+          </mat-option>
+        </mat-select>
+        <mat-hint>Select which hours of the day</mat-hint>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="cronOptions.includeDates">
+      <mat-form-field>
+        <mat-label>Dates</mat-label>
+        <mat-select multiple formControlName="datesCronControl" (selectionChange)="formatDates($event)">
+          <mat-option *ngFor="let date of monthDays" [value]="date.value">{{date.friendly}}</mat-option>
+        </mat-select>
+        <mat-hint *ngIf="cronOptions.showHints">Select which dates of the month</mat-hint>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="cronOptions.includeMonths">
+      <mat-form-field>
+        <mat-label>Months</mat-label>
+        <mat-select multiple formControlName="monthsCronControl" (selectionChange)="formatMonths($event)">
+          <mat-option *ngFor="let month of months" [value]="month.value">{{month.friendly}}</mat-option>
+        </mat-select>
+        <mat-hint *ngIf="cronOptions.showHints">Select which months of the year</mat-hint>
+      </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="cronOptions.includeDays">
+      <mat-form-field>
+        <mat-label>Days</mat-label>
+        <mat-select multiple formControlName="daysCronControl" (selectionChange)="formatDays($event)">
+          <mat-option
+            *ngFor="let day of weekDays"
+            [value]="day.value"
+          >
+            {{day.friendly}}
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="cronOptions.showHints">Select which days of the week</mat-hint>
+      </mat-form-field>
+    </ng-container>
+  </div>
+</form>

@@ -316,8 +316,14 @@
 </div>
 
 <div class="content" role="main">
-  <lib-mat-hourly-cron (cronEvent)="setCron($event)"></lib-mat-hourly-cron>
-  <p>{{hourlyCron}}</p>
+<!--  <lib-mat-hourly-cron (cronEvent)="setCron($event)"></lib-mat-hourly-cron>-->
+<!--  <p>{{hourlyCron}}</p>-->
+
+  <lib-mat-minute-cron
+    (cronEvent)="showCron($event)"
+    [cronOptions]="cronOptions"
+  ></lib-mat-minute-cron>
+  <h1>{{resultingCron}}</h1>
 </div>
 
 
