@@ -1,11 +1,12 @@
 <form [formGroup]="minuteCronForm">
   <div class="flex-container">
-    <ng-container>
+<!--    Minutes between -->
+    <ng-container *ngIf="cronOptions.includeMinutesBetween">
       <mat-form-field>
         <mat-label>Minutes between</mat-label>
-        <mat-select formControlName="minuteCronControl" (selectionChange)="formatMinutes($event)">
+        <mat-select formControlName="minutesBetweenCronControl" (selectionChange)="formatMinutesBetween($event)">
           <mat-option
-            *ngFor="let minute of minutes"
+            *ngFor="let minute of minutesBetween"
             [value]="minute.value"
           >
             {{minute.friendly}}
@@ -14,10 +15,92 @@
         <mat-hint *ngIf="cronOptions.showHints">Select how many minutes between jobs</mat-hint>
       </mat-form-field>
     </ng-container>
+<!-- Hours between -->
+    <ng-container *ngIf="cronOptions.includeHoursBetween">
+      <mat-form-field>
+        <mat-label>Hours between</mat-label>
+        <mat-select formControlName="hoursBetweenCronControl" (selectionChange)="formatHoursBetween($event)">
+          <mat-option
+            *ngFor="let hour of hoursBetween"
+            [value]="hour.value"
+          >
+            {{hour.friendly}}
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="cronOptions.showHints">Select how many hours between jobs</mat-hint>
+      </mat-form-field>
+    </ng-container>
+<!--    Month days between-->
+    <ng-container *ngIf="cronOptions.includeDatesBetween">
+      <mat-form-field>
+        <mat-label>Days between</mat-label>
+        <mat-select formControlName="datesBetweenCronControl" (selectionChange)="formatDatesBetween($event)">
+          <mat-option
+            *ngFor="let date of datesBetween"
+            [value]="date.value"
+          >
+            {{date.friendly}}
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="cronOptions.showHints">Select how many days between jobs</mat-hint>
+      </mat-form-field>
+    </ng-container>
+
+<!--    Months between-->
+    <ng-container *ngIf="cronOptions.includeMonthsBetween">
+      <mat-form-field>
+        <mat-label>Months between</mat-label>
+        <mat-select formControlName="monthsBetweenCronControl" (selectionChange)="formatMonthsBetween($event)">
+          <mat-option
+            *ngFor="let month of monthsBetween"
+            [value]="month.value"
+          >
+            {{month.friendly}}
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="cronOptions.showHints">Select how many months between jobs</mat-hint>
+      </mat-form-field>
+    </ng-container>
+
+<!--    Week days between -->
+    <ng-container *ngIf="cronOptions.includeDaysBetween">
+      <mat-form-field>
+        <mat-label>Weekdays between</mat-label>
+        <mat-select formControlName="daysBetweenCronControl" (selectionChange)="formatDaysBetween($event)">
+          <mat-option
+            *ngFor="let weekDay of daysBetween"
+            [value]="weekDay.value"
+          >
+            {{weekDay.friendly}}
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="cronOptions.showHints">Select how many weekdays between jobs</mat-hint>
+      </mat-form-field>
+    </ng-container>
+  </div>
+
+  <div class="flex-container">
+    <ng-container *ngIf="cronOptions.includeMinutes">
+      <mat-form-field>
+        <mat-label>At Minutes</mat-label>
+        <mat-select formControlName="minutesCronControl" (selectionChange)="formatMinutes($event)" multiple>
+          <button mat-button (click)="selectAll('minutesCronControl', minutes, 0)">Select All</button>
+          <mat-option
+            *ngFor="let minute of minutes"
+            [value]="minute.value"
+          >
+            {{minute.friendly}}
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="cronOptions.showHints">Select which minutes of the hour</mat-hint>
+      </mat-form-field>
+    </ng-container>
+
     <ng-container *ngIf="cronOptions.includeHours">
       <mat-form-field>
-        <mat-label>Hours</mat-label>
+        <mat-label>On Hours</mat-label>
         <mat-select formControlName="hoursCronControl" (selectionChange)="formatHours($event)" multiple>
+          <button mat-button (click)="selectAll('hoursCronControl', hours, 1)">Select All</button>
           <mat-option
             *ngFor="let hour of hours"
             [value]="hour.value"
@@ -30,8 +113,9 @@
     </ng-container>
     <ng-container *ngIf="cronOptions.includeDates">
       <mat-form-field>
-        <mat-label>Dates</mat-label>
+        <mat-label>On Dates</mat-label>
         <mat-select multiple formControlName="datesCronControl" (selectionChange)="formatDates($event)">
+          <button mat-button (click)="selectAll('datesCronControl', monthDays, 2)">Select All</button>
           <mat-option *ngFor="let date of monthDays" [value]="date.value">{{date.friendly}}</mat-option>
         </mat-select>
         <mat-hint *ngIf="cronOptions.showHints">Select which dates of the month</mat-hint>
@@ -39,8 +123,9 @@
     </ng-container>
     <ng-container *ngIf="cronOptions.includeMonths">
       <mat-form-field>
-        <mat-label>Months</mat-label>
+        <mat-label>For Months</mat-label>
         <mat-select multiple formControlName="monthsCronControl" (selectionChange)="formatMonths($event)">
+          <button mat-button (click)="selectAll('monthsCronControl', months, 3)">Select All</button>
           <mat-option *ngFor="let month of months" [value]="month.value">{{month.friendly}}</mat-option>
         </mat-select>
         <mat-hint *ngIf="cronOptions.showHints">Select which months of the year</mat-hint>
@@ -48,8 +133,9 @@
     </ng-container>
     <ng-container *ngIf="cronOptions.includeDays">
       <mat-form-field>
-        <mat-label>Days</mat-label>
+        <mat-label>On Days</mat-label>
         <mat-select multiple formControlName="daysCronControl" (selectionChange)="formatDays($event)">
+          <button mat-button (click)="selectAll('daysCronControl', weekDays, 4)">Select All</button>
           <mat-option
             *ngFor="let day of weekDays"
             [value]="day.value"

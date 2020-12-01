@@ -1,9 +1,15 @@
 export interface CronOptionsInterface {
+  // jobType: CronJobType;
   includeMinutes?: boolean;
   includeHours?: boolean;
   includeDates?: boolean;
   includeMonths?: boolean;
   includeDays?: boolean;
+  includeMinutesBetween?: boolean;
+  includeHoursBetween?: boolean;
+  includeDatesBetween?: boolean;
+  includeMonthsBetween?: boolean;
+  includeDaysBetween?: boolean;
   showHints?: boolean;
   defaultCron?: string;
 }
@@ -14,6 +20,10 @@ export interface SelectOptionInterface {
 }
 
 export type CronIndex = 0| 1 | 2 | 3 | 4;
+
+export type CronUnits = 'minutes' | 'hours' | 'dates' | 'months' | 'days';
+
+export type CronJobType = 'minutely' | 'hourly' | 'daily' | 'weekly' | 'monthly';
 
 // export enum DaysOfWeekEnum {
 //   SUN = 0,

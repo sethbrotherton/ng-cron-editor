@@ -6,6 +6,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
 import { MatMinuteCronComponent } from './mat-minute-cron/mat-minute-cron.component';
+import {MatButtonModule} from '@angular/material/button';
 
 
 
@@ -15,7 +16,8 @@ import { MatMinuteCronComponent } from './mat-minute-cron/mat-minute-cron.compon
     MatFormFieldModule,
     MatSelectModule,
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatButtonModule
   ],
   exports: [MaterialCronJobsComponent, MatHourlyCronComponent, MatMinuteCronComponent]
 })

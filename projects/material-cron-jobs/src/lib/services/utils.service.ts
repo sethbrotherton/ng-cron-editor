@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {SelectOptionInterface} from '../models.model';
+import {CronUnits, SelectOptionInterface} from '../models.model';
 
 @Injectable({
   providedIn: 'root'
@@ -7,21 +7,6 @@ import {SelectOptionInterface} from '../models.model';
 export class UtilsService {
 
   constructor() { }
-
-  // range(length: number, startFromZero?: boolean): SelectOptionInterface[] {
-  //   return Array(length).fill(1).map((x, y) => {
-  //     const tot = x + y;
-  //     let val;
-  //     if (tot < 10) {
-  //       val = '0' + tot;
-  //     }
-  //     val = tot.toString();
-  //     return {
-  //       value: parseInt(startFromZero ? val - 1 : val, 10),
-  //       friendly: startFromZero ? val - 1 : val
-  //     };
-  //   });
-  // }
 
   range(length: number, startFromZero?: boolean): SelectOptionInterface[] {
     return Array(length).fill(1).map((x, y) => {
@@ -35,13 +20,19 @@ export class UtilsService {
   rangeOptions(length: number, unit: string): SelectOptionInterface[] {
     return Array(length).fill(1).map((x, y) => {
       return {
-        value: x + y,
+        value: `*/${x + y}`,
         friendly: `Every ${x + y} ${unit}${x + y > 1 ? 's' : ''}`
       };
     });
   }
 
-  formatSequentialValues(arr: number[]): string {
+  plainRange(length: number, startFromZero: boolean): number[] {
+    return Array(length).fill(1).map((x, y) => {
+      return startFromZero ? x + y - 1 : x + y;
+    });
+  }
+
+  formatSequentialValues(arr: number[], type: CronUnits): string {
     const obj = {};
     let key = 0;
     let prev;
@@ -66,11 +57,24 @@ export class UtilsService {
       }
     }
     cronString = cronString.slice(0, -1);
-    console.log(obj);
+    if (type === 'minutes' && cronString === '0-59') {
+      return '*';
+    } else if (type === 'hours' && cronString === '0-23') {
+      return '*';
+    } else if (type === 'dates' && cronString === '1-31') {
+      return '*';
+    } else if (type === 'months' && cronString === '1-12') {
+      return '*';
+    } else if (type === 'days' && cronString === '0-6') {
+      return '*';
+    }
     return cronString;
   }
 
-  unformatSequentialValues(val: string): any[] {
+  deFormatSequentialValues(val: string, range?: number, startFromZero?: boolean): any[] {
+    if (val === '*') {
+      return this.plainRange(range, startFromZero);
+    }
     if (val.length === 1) {
       return [parseInt(val, 10)];
     }
@@ -82,20 +86,28 @@ export class UtilsService {
     if (split?.length) {
       split.forEach(item => {
         if (item.indexOf('-') > -1) {
-          const ends = item.split('-');
-          const first = ends[0];
-          const last = ends[1];
-          for (let i = first; i <= last; i++) {
-            res.push(i);
-          }
+          handleDashes(item);
         } else {
           res.push(item);
         }
       });
+    } else if (val.indexOf('-') > -1) {
+      handleDashes(val);
+    } else {
+      res.push(val);
     }
     return res.map(item => {
       return parseInt(item, 10);
     });
+
+    function handleDashes(withDash: string): void {
+      const ends = withDash.split('-');
+      const first = parseInt(ends[0], 10);
+      const last = parseInt(ends[1], 10);
+      for (let i = first; i <= last; i++) {
+        res.push(i);
+      }
+    }
   }
 
   validateCron(cron: string): any {
