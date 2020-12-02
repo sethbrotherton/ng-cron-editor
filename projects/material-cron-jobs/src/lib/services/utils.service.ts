@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {CronUnits, SelectOptionInterface} from '../models.model';
 
 @Injectable({
@@ -18,12 +18,13 @@ export class UtilsService {
   }
 
   rangeOptions(length: number, unit: string): SelectOptionInterface[] {
-    return Array(length).fill(1).map((x, y) => {
+    const arr = Array(length).fill(1).map((x, y) => {
       return {
         value: `*/${x + y}`,
         friendly: `Every ${x + y} ${unit}${x + y > 1 ? 's' : ''}`
       };
     });
+    return [{value: '', friendly: 'n/a'}, ...arr];
   }
 
   plainRange(length: number, startFromZero: boolean): number[] {

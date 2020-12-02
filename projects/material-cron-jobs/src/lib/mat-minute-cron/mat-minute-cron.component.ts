@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {UtilsService} from '../services/utils.service';
-import {FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, Validator, ValidatorFn, Validators} from '@angular/forms';
 import {MatSelectChange} from '@angular/material/select';
 import {CronIndex, CronOptionsInterface, DaysOfWeek, Months, SelectOptionInterface} from '../models.model';
 import {ReplaySubject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'lib-mat-minute-cron',
@@ -74,73 +75,74 @@ export class MatMinuteCronComponent implements OnInit, OnDestroy {
       monthsCronControl: new FormControl(''),
       daysCronControl: new FormControl('')
     });
-    // this.addJobTypeControls();
-    // this.addIncludedControls();
     this.setControlValues();
-  }
 
-  // addJobTypeControls(): void {
-  //   if (this.cronOptions.jobType === 'minutely') {
-  //     this.minuteCronForm.addControl('minutesBetweenCronControl', new FormControl(''));
-  //   } else if (this.cronOptions.jobType === 'hourly') {
-  //     this.minuteCronForm.addControl('hoursBetweenCronControl', new FormControl(''));
-  //   } else if (this.cronOptions.jobType === 'daily') {
-  //     this.minuteCronForm.addControl('datesBetweenCronControl', new FormControl(''));
-  //   } else if (this.cronOptions.jobType === 'weekly') {
-  //     this.minuteCronForm.addControl('daysBetweenCronControl', new FormControl(''));
-  //   } else if (this.cronOptions.jobType === 'monthly') {
-  //     this.minuteCronForm.addControl('monthsBetweenCronControl', new FormControl(''));
-  //   }
-  // }
-
-  addIncludedControls(): void {
-    if (this.cronOptions.includeMinutes) {
-      this.minuteCronForm.addControl('minutesCronControl', new FormControl(('')));
-    }
-    if (this.cronOptions.includeHours) {
-      this.minuteCronForm.addControl('hoursCronControl', new FormControl(''));
-    }
-    if (this.cronOptions.includeDates) {
-      this.minuteCronForm.addControl('datesCronControl', new FormControl(''));
-    }
-    if (this.cronOptions.includeMonths) {
-      this.minuteCronForm.addControl('monthsCronControl', new FormControl(''));
-    }
-    if (this.cronOptions.includeDays) {
-      this.minuteCronForm.addControl('daysCronControl', new FormControl(''));
-    }
+    // this.minuteCronForm.valueChanges.pipe(takeUntil(this.destroyer$))
+    //   .subscribe(val => {
+    //     this.minuteCronForm.updateValueAndValidity();
+    //   });
+    // this.minuteCronForm.get('minutesBetweenCronControl').valueChanges.pipe(takeUntil(this.destroyer$))
+    //   .subscribe(val => {
+    //     this.minuteCronForm.get('minutesCronControl').updateValueAndValidity();
+    //   });
+    // this.minuteCronForm.get('minutesCronControl').valueChanges.pipe(takeUntil(this.destroyer$))
+    //   .subscribe(val => {
+    //     this.minuteCronForm.get('minutesBetweenCronControl').updateValueAndValidity();
+    //   });
   }
 
   setControlValues(): void {
     if (this.cronOptions?.defaultCron) {
       const [min, hrs, dts, mos, dys] = this.cronOptions.defaultCron.split(' ');
       console.log(min, hrs, dts, mos, dys);
-      if (this.needsDeformatting(min)) {
-        this.minuteCronForm.get('minutesBetweenCronControl').setValue(min);
-      } else {
-        this.minuteCronForm.get('minutesCronControl').setValue(this.utils.deFormatSequentialValues(min, 60, true));
+      const minSegments = min.split(',');
+      const btwnMins = minSegments.filter(part => /\*\/\d/g.test(part));
+      const restMins = minSegments.filter(part => !/\*\/\d/g.test(part));
+      if (btwnMins[0]) {
+        this.minuteCronForm.get('minutesBetweenCronControl').setValue(btwnMins[0]);
       }
-      if (this.needsDeformatting(hrs)) {
-        console.log('not', hrs, typeof hrs);
-        this.minuteCronForm.get('hoursBetweenCronControl').setValue([parseInt(hrs, 10)]);
-      } else {
-        console.log('test', this.utils.deFormatSequentialValues(hrs, 24, true));
-        this.minuteCronForm.get('hoursCronControl').setValue(this.utils.deFormatSequentialValues(hrs, 24, true));
+      if (restMins.length){
+        this.minuteCronForm.get('minutesCronControl').setValue(this.utils.deFormatSequentialValues(restMins.join(','), 60, true));
       }
-      if (this.needsDeformatting(dts)) {
-        this.minuteCronForm.get('datesBetweenCronControl').setValue(dts);
-      } else {
-        this.minuteCronForm.get('datesCronControl').setValue(this.utils.deFormatSequentialValues(dts, 31));
+
+      const hrSegments = hrs.split(',');
+      const btwnHrs = hrSegments.filter(part => /\*\/\d/g.test(part));
+      const restHrs = hrSegments.filter(part => !/\*\/\d/g.test(part));
+      if (btwnHrs[0]) {
+        this.minuteCronForm.get('hoursBetweenCronControl').setValue(btwnHrs[0]);
       }
-      if (this.needsDeformatting(dys)) {
-        this.minuteCronForm.get('daysBetweenCronControl').setValue(dys);
-      } else {
-        this.minuteCronForm.get('daysCronControl').setValue(this.utils.deFormatSequentialValues(dys, 7, true));
+      if (restHrs.length) {
+        this.minuteCronForm.get('hoursCronControl').setValue(this.utils.deFormatSequentialValues(restHrs.join(','), 24, true));
       }
-      if (this.needsDeformatting(mos)) {
-        this.minuteCronForm.get('monthsBetweenCronControl').setValue(mos);
-      } else {
-        this.minuteCronForm.get('monthsCronControl').setValue(this.utils.deFormatSequentialValues(mos, 12, true));
+
+      const dtSegments = dts.split(',');
+      const btwnDts = dtSegments.filter(part => /\*\/\d/g.test(part));
+      const restDts = dtSegments.filter(part => !/\*\/\d/g.test(part));
+      if (btwnDts[0]) {
+        this.minuteCronForm.get('datesBetweenCronControl').setValue(btwnDts[0]);
+      }
+      if (restDts.length) {
+        this.minuteCronForm.get('datesCronControl').setValue(this.utils.deFormatSequentialValues(restDts.join(','), 31));
+      }
+
+      const dySegments = dys.split(',');
+      const btwnDys = dySegments.filter(part => /\*\/\d/g.test(part));
+      const restDys = dySegments.filter(part => !/\*\/\d/g.test(part));
+      if (btwnDys[0]) {
+        this.minuteCronForm.get('daysBetweenCronControl').setValue(btwnDys[0]);
+      }
+      if (restDys.length) {
+        this.minuteCronForm.get('daysCronControl').setValue(this.utils.deFormatSequentialValues(restDys.join(','), 7, true));
+      }
+
+      const moSegments = mos.split(',');
+      const btwnMos = moSegments.filter(part => /\*\/\d/g.test(part));
+      const restMos = moSegments.filter(part => !/\*\/\d/g.test(part));
+      if (btwnMos[0]) {
+        this.minuteCronForm.get('monthsBetweenCronControl').setValue(btwnMos[0]);
+      }
+      if (restMos.length) {
+        this.minuteCronForm.get('monthsCronControl').setValue(this.utils.deFormatSequentialValues(restMos.join(','), 12, true));
       }
     }
   }
@@ -152,7 +154,8 @@ export class MatMinuteCronComponent implements OnInit, OnDestroy {
   emitCron(): void {
     this.cronEvent.emit({
       formValues: this.minuteCronForm.value,
-      cronString: this.cronString
+      cronString: this.cronString,
+      finalCron: this.finalCronFormat()
     });
   }
 
@@ -213,6 +216,84 @@ export class MatMinuteCronComponent implements OnInit, OnDestroy {
     const onlyNumbers = values.map(item => item.value);
     control.setValue(onlyNumbers);
     this.formatCron('*', index);
+  }
+
+  unSelectAll(controlName: string): void {
+    this.minuteCronForm.get(controlName).setValue([]);
+  }
+
+  // conditionallyRequired(otherControlName: string): ValidatorFn {
+  //   return (control: AbstractControl): ValidationErrors => {
+  //     if (!control.parent) {
+  //       return null;
+  //     }
+  //     // const thisControlVal = control.value;
+  //     const otherControlVal = control.parent.get(otherControlName).value;
+  //     if (otherControlVal === '' || otherControlVal === []) {
+  //       return Validators.required(control);
+  //     } else {
+  //       return null;
+  //     }
+  //   };
+  // }
+
+  finalCronFormat(): string {
+    let minutesValue: string;
+    let hoursValue: string;
+    let datesValue: string;
+    let monthsValue: string;
+    let daysValue: string;
+    // Handle minutes
+    const minutesBetween = this.minuteCronForm.get('minutesBetweenCronControl').value;
+    const minutes = this.utils.formatSequentialValues(this.minuteCronForm.get('minutesCronControl').value, 'minutes');
+    if (minutesBetween && minutes.length) {
+      minutesValue = [minutesBetween, ...minutes.split(',')].join(',');
+    } else if (minutesBetween && !minutes.length) {
+      minutesValue = minutesBetween;
+    } else {
+      minutesValue = minutes;
+    }
+    // Handle hours
+    const hoursBetween = this.minuteCronForm.get('hoursBetweenCronControl').value;
+    const hours = this.utils.formatSequentialValues(this.minuteCronForm.get('hoursCronControl').value, 'hours');
+    if (hoursBetween) {
+      hoursValue = [hoursBetween, ...hours.split(',')].join(',');
+    } else if (hoursBetween && !hours.length) {
+      hoursValue = hoursBetween;
+    } else {
+      hoursValue = hours;
+    }
+    // Handle dates
+    const datesBetween = this.minuteCronForm.get('datesBetweenCronControl').value;
+    const dates = this.utils.formatSequentialValues(this.minuteCronForm.get('datesCronControl').value, 'dates');
+    if (datesBetween) {
+      datesValue = [datesBetween, ...dates.split(',')].join(',');
+    } else if (datesBetween && !dates.length) {
+      datesValue = datesBetween;
+    } else {
+      datesValue = dates;
+    }
+    // Handle months
+    const monthsBetween = this.minuteCronForm.get('monthsBetweenCronControl').value;
+    const months = this.utils.formatSequentialValues(this.minuteCronForm.get('monthsCronControl').value, 'months');
+    if (monthsBetween) {
+      monthsValue = [monthsBetween, ...months.split(',')].join(',');
+    } else if (monthsBetween && !months.length) {
+      monthsValue = monthsBetween;
+    } else {
+      monthsValue = months;
+    }
+    // Handle days
+    const daysBetween = this.minuteCronForm.get('daysBetweenCronControl').value;
+    const days = this.utils.formatSequentialValues(this.minuteCronForm.get('daysCronControl').value, 'days');
+    if (daysBetween) {
+      daysValue = [daysBetween, ...days.split(',')].join(',');
+    } else if (daysBetween && !days.length) {
+      daysValue = daysBetween;
+    } else {
+      daysValue = days;
+    }
+    return `${minutesValue} ${hoursValue} ${datesValue} ${monthsValue} ${daysValue}`;
   }
 
   ngOnDestroy(): void {

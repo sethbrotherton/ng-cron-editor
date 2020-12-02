@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
     includeMonthsBetween: true,
     includeDatesBetween: true,
     showHints: true,
-    defaultCron: '0 1 1 1 0'
+    defaultCron: '*/5,0,15 */2,9,5 */6,15,30 */3,8,10 */3,1'
   };
   resultingCron = '';
 
@@ -70,6 +70,6 @@ export class AppComponent implements OnInit {
 
   showCron(event): void {
     console.log(event);
-    this.resultingCron = event.cronString;
+    this.resultingCron = event.finalCron;
   }
 }
