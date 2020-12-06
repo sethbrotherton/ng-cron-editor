@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
 import { MaterialCronJobsComponent } from './material-cron-jobs.component';
-import { MatHourlyCronComponent } from './mat-hourly-cron/mat-hourly-cron.component';
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatSelectModule} from "@angular/material/select";
-import {CommonModule} from "@angular/common";
-import {ReactiveFormsModule} from "@angular/forms";
-import { MatMinuteCronComponent } from './mat-minute-cron/mat-minute-cron.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {CommonModule} from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
+import { MatCronEditorComponent } from './mat-cron-editor/mat-cron-editor.component';
 import {MatButtonModule} from '@angular/material/button';
 
 
 
 @NgModule({
-  declarations: [MaterialCronJobsComponent, MatHourlyCronComponent, MatMinuteCronComponent],
+  declarations: [MaterialCronJobsComponent, MatCronEditorComponent],
   imports: [
     MatFormFieldModule,
     MatSelectModule,
@@ -19,6 +18,6 @@ import {MatButtonModule} from '@angular/material/button';
     ReactiveFormsModule,
     MatButtonModule
   ],
-  exports: [MaterialCronJobsComponent, MatHourlyCronComponent, MatMinuteCronComponent]
+  exports: [MaterialCronJobsComponent, MatCronEditorComponent]
 })
 export class MaterialCronJobsModule { }

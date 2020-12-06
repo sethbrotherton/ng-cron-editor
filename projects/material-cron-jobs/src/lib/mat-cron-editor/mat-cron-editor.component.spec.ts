@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatHourlyCronComponent } from './mat-hourly-cron.component';
+import { MatCronEditorComponent } from './mat-cron-editor.component';
 
-describe('MatHourlyCronComponent', () => {
-  let component: MatHourlyCronComponent;
-  let fixture: ComponentFixture<MatHourlyCronComponent>;
+describe('MatMinuteCronComponent', () => {
+  let component: MatCronEditorComponent;
+  let fixture: ComponentFixture<MatCronEditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MatHourlyCronComponent ]
+      declarations: [ MatCronEditorComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MatHourlyCronComponent);
+    fixture = TestBed.createComponent(MatCronEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,10 +1,13 @@
-<form [formGroup]="minuteCronForm">
-  <div class="flex-container">
+<form
+  [formGroup]="cronEditorForm"
+  [ngStyle]="{'display': 'flex', 'flex-direction': cronOptions.flexDirection === 'row' ? 'column': 'row'}"
+>
+  <div class="flex-container" [ngStyle]="{'flex-direction': cronOptions.flexDirection}">
 <!--    Minutes between -->
     <ng-container *ngIf="cronOptions.includeMinutesBetween">
       <mat-form-field>
         <mat-label>Minutes between</mat-label>
-        <mat-select formControlName="minutesBetweenCronControl" (selectionChange)="formatMinutesBetween($event)">
+        <mat-select formControlName="minutesBetweenCronControl">
           <mat-option
             *ngFor="let minute of minutesBetween"
             [value]="minute.value"
@@ -19,7 +22,7 @@
     <ng-container *ngIf="cronOptions.includeHoursBetween">
       <mat-form-field>
         <mat-label>Hours between</mat-label>
-        <mat-select formControlName="hoursBetweenCronControl" (selectionChange)="formatHoursBetween($event)">
+        <mat-select formControlName="hoursBetweenCronControl">
           <mat-option
             *ngFor="let hour of hoursBetween"
             [value]="hour.value"
@@ -34,7 +37,7 @@
     <ng-container *ngIf="cronOptions.includeDatesBetween">
       <mat-form-field>
         <mat-label>Days between</mat-label>
-        <mat-select formControlName="datesBetweenCronControl" (selectionChange)="formatDatesBetween($event)">
+        <mat-select formControlName="datesBetweenCronControl">
           <mat-option
             *ngFor="let date of datesBetween"
             [value]="date.value"
@@ -50,7 +53,7 @@
     <ng-container *ngIf="cronOptions.includeMonthsBetween">
       <mat-form-field>
         <mat-label>Months between</mat-label>
-        <mat-select formControlName="monthsBetweenCronControl" (selectionChange)="formatMonthsBetween($event)">
+        <mat-select formControlName="monthsBetweenCronControl">
           <mat-option
             *ngFor="let month of monthsBetween"
             [value]="month.value"
@@ -66,7 +69,7 @@
     <ng-container *ngIf="cronOptions.includeDaysBetween">
       <mat-form-field>
         <mat-label>Weekdays between</mat-label>
-        <mat-select formControlName="daysBetweenCronControl" (selectionChange)="formatDaysBetween($event)">
+        <mat-select formControlName="daysBetweenCronControl">
           <mat-option
             *ngFor="let weekDay of daysBetween"
             [value]="weekDay.value"
@@ -79,13 +82,13 @@
     </ng-container>
   </div>
 
-  <div class="flex-container">
+  <div class="flex-container" [ngStyle]="{'flex-direction': cronOptions.flexDirection}">
     <ng-container *ngIf="cronOptions.includeMinutes">
       <mat-form-field>
         <mat-label>At Minutes</mat-label>
-        <mat-select formControlName="minutesCronControl" (selectionChange)="formatMinutes($event)" multiple>
+        <mat-select formControlName="minutesCronControl" multiple>
           <button
-            *ngIf="minuteCronForm.get('minutesCronControl').value.length !== minutes.length; else unSelectMinutes"
+            *ngIf="cronEditorForm.get('minutesCronControl').value.length !== minutes.length; else unSelectMinutes"
             mat-button
             (click)="selectAll('minutesCronControl', minutes, 0)"
             class="mat-option">Select All
@@ -111,10 +114,11 @@
     <ng-container *ngIf="cronOptions.includeHours">
       <mat-form-field>
         <mat-label>On Hours</mat-label>
-        <mat-select formControlName="hoursCronControl" (selectionChange)="formatHours($event)" multiple>
+        <mat-select formControlName="hoursCronControl" multiple>
           <button
-            *ngIf="minuteCronForm.get('hoursCronControl').value.length !== hours.length; else unSelectHours"
+            *ngIf="cronEditorForm.get('hoursCronControl').value.length !== hours.length; else unSelectHours"
             mat-button
+            class="mat-option"
             (click)="selectAll('hoursCronControl', hours, 1)">Select All
           </button>
           <ng-template #unSelectHours>
@@ -137,10 +141,11 @@
     <ng-container *ngIf="cronOptions.includeDates">
       <mat-form-field>
         <mat-label>On Dates</mat-label>
-        <mat-select multiple formControlName="datesCronControl" (selectionChange)="formatDates($event)">
+        <mat-select multiple formControlName="datesCronControl">
           <button
-            *ngIf="minuteCronForm.get('datesCronControl').value.length !== monthDays.length; else unSelectDates"
+            *ngIf="cronEditorForm.get('datesCronControl').value.length !== monthDays.length; else unSelectDates"
             mat-button
+            class="mat-option"
             (click)="selectAll('datesCronControl', monthDays, 2)">Select All
           </button>
           <ng-template #unSelectDates>
@@ -158,10 +163,11 @@
     <ng-container *ngIf="cronOptions.includeMonths">
       <mat-form-field>
         <mat-label>For Months</mat-label>
-        <mat-select multiple formControlName="monthsCronControl" (selectionChange)="formatMonths($event)">
+        <mat-select multiple formControlName="monthsCronControl">
           <button
-            *ngIf="minuteCronForm.get('monthsCronControl').value.length !== months.length; else unSelectMonths"
+            *ngIf="cronEditorForm.get('monthsCronControl').value.length !== months.length; else unSelectMonths"
             mat-button
+            class="mat-option"
             (click)="selectAll('monthsCronControl', months, 3)">Select All
           </button>
           <ng-template #unSelectMonths>
@@ -179,10 +185,11 @@
     <ng-container *ngIf="cronOptions.includeDays">
       <mat-form-field>
         <mat-label>On Days</mat-label>
-        <mat-select multiple formControlName="daysCronControl" (selectionChange)="formatDays($event)">
+        <mat-select multiple formControlName="daysCronControl">
           <button
-            *ngIf="minuteCronForm.get('daysCronControl').value.length !== weekDays.length; else unSelectDays"
+            *ngIf="cronEditorForm.get('daysCronControl').value.length !== weekDays.length; else unSelectDays"
             mat-button
+            class="mat-option"
             (click)="selectAll('daysCronControl', weekDays, 4)">Select All
           </button>
           <ng-template #unSelectDays>

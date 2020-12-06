@@ -1,28 +1,8 @@
 <div>
-<!--  <lib-mat-hourly-cron (cronEvent)="setCron($event)"></lib-mat-hourly-cron>-->
-<!--  <p>{{hourlyCron}}</p>-->
-
-<!--  <mat-form-field>-->
-<!--    <mat-label>Select Job Type</mat-label>-->
-<!--    <mat-select (selectionChange)="setJobType($event)">-->
-<!--      <mat-option *ngFor="let type of jobTypes" [value]="type">{{type}}</mat-option>-->
-<!--    </mat-select>-->
-<!--  </mat-form-field>-->
   <mat-toolbar class="toolbar">
     <span>Angular Material Cron Demo</span>
   </mat-toolbar>
-
   <div fxLayout="column" fxLayoutAlign="center center">
-<!--    <mat-label>Select Job Type</mat-label>-->
-<!--    <mat-radio-group>-->
-<!--      <mat-radio-button-->
-<!--        *ngFor="let type of jobTypes"-->
-<!--        [value]="type"-->
-<!--        (change)="setJobType($event)"-->
-<!--        [checked]="cronOptions.jobType === type">{{type | titlecase}}-->
-<!--      </mat-radio-button>-->
-<!--    </mat-radio-group>-->
-
     <h3>Cron Settings</h3>
     <div fxLayout="row" fxLayoutAlign="center center">
       <mat-checkbox
@@ -38,21 +18,17 @@
         (change)="updateSetting($event, setting)"
       >{{setting}}</mat-checkbox>
     </div>
-
     <div fxLayout="row" fxLayoutAlign="center center">
       <mat-form-field>
         <mat-label>Default Cron</mat-label>
         <input matInput [value]="cronOptions.defaultCron" #defaultCron>
       </mat-form-field>
-      <button mat-button color="blue" (click)="updateDefaultCron()">Set Default Cron</button>
     </div>
-
-    <lib-mat-minute-cron
+    <mat-cron-editor
       (cronEvent)="showCron($event)"
       [cronOptions]="cronOptions"
-    ></lib-mat-minute-cron>
+    ></mat-cron-editor>
     <h1>{{resultingCron}}</h1>
-
   </div>
 </div>
 

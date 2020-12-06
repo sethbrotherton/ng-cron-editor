@@ -1,5 +1,6 @@
+import {FormGroup} from '@angular/forms';
+
 export interface CronOptionsInterface {
-  // jobType: CronJobType;
   includeMinutes?: boolean;
   includeHours?: boolean;
   includeDates?: boolean;
@@ -12,6 +13,12 @@ export interface CronOptionsInterface {
   includeDaysBetween?: boolean;
   showHints?: boolean;
   defaultCron?: string;
+  flexDirection?: 'column' | 'column-reverse' | 'row' | 'row-reverse';
+}
+
+export interface CronStreamValues {
+  cronForm: FormGroup;
+  cronValue: string;
 }
 
 export interface SelectOptionInterface {
@@ -22,18 +29,6 @@ export interface SelectOptionInterface {
 export type CronIndex = 0| 1 | 2 | 3 | 4;
 
 export type CronUnits = 'minutes' | 'hours' | 'dates' | 'months' | 'days';
-
-export type CronJobType = 'minutely' | 'hourly' | 'daily' | 'weekly' | 'monthly';
-
-// export enum DaysOfWeekEnum {
-//   SUN = 0,
-//   MON,
-//   TUE,
-//   WED,
-//   THU,
-//   FRI,
-//   SAT
-// }
 
 export const DaysOfWeek = {
   SUN: 0,

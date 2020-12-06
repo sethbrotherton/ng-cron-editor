@@ -10,11 +10,36 @@ export class UtilsService {
 
   range(length: number, startFromZero?: boolean): SelectOptionInterface[] {
     return Array(length).fill(1).map((x, y) => {
+      if (length === 24) {
+        const friendly = amPm(startFromZero ? x + y - 1 : x + y);
+        return {
+          value: startFromZero ? x + y - 1 : x + y,
+          friendly
+        };
+      }
       return {
         value: startFromZero ? x + y - 1 : x + y,
         friendly: startFromZero ? x + y - 1 : x + y
       };
     });
+
+    function amPm(hour: number): any {
+      let hrStr;
+      let hrMod;
+      if (hour >= 12) {
+        hrMod = hour - 12;
+        hrStr = `${hour}  (${hrMod} PM)`;
+        if (hour === 12) {
+          hrStr = `${hour}  (12 PM)`;
+        }
+      } else {
+        hrStr = `${hour}  (${hour} AM)`;
+        if (hour === 0) {
+          hrStr = `${hour}  (12 AM)`;
+        }
+      }
+      return hrStr;
+    }
   }
 
   rangeOptions(length: number, unit: string): SelectOptionInterface[] {
@@ -112,8 +137,12 @@ export class UtilsService {
   }
 
   validateCron(cron: string): any {
-    if (cron.split(' ').length !== 5) {
-      throw new Error('Cron must have 5 values');
+    const segments = cron.split(' ');
+    if (!segments) {
+      throw new Error('Must provide default cron');
+    }
+    if (segments.length !== 5) {
+      throw new Error('Cron expression must have 5 segments: minutes, hours, dates(of the months), months, days(of the week)');
     }
   }
 }
