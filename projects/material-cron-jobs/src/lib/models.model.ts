@@ -13,13 +13,15 @@ export interface CronOptionsInterface {
   includeDaysBetween?: boolean;
   showHints?: boolean;
   defaultCron?: string;
-  flexDirection?: 'column' | 'column-reverse' | 'row' | 'row-reverse';
+  flexDirection?: FlexDirectionOptions;
 }
 
 export interface CronStreamValues {
   cronForm: FormGroup;
   cronValue: string;
 }
+
+export type FlexDirectionOptions = 'column' | 'column-reverse' | 'row' | 'row-reverse';
 
 export interface SelectOptionInterface {
   value: string | number;

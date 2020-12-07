@@ -85,7 +85,6 @@ export class MatCronEditorComponent implements OnInit, OnDestroy {
   setControlValues(): void {
     if (this.cronOptions?.defaultCron) {
       const [min, hrs, dts, mos, dys] = this.cronOptions.defaultCron.split(' ');
-      console.log(min, hrs, dts, mos, dys);
       const minSegments = min.split(',');
       const btwnMins = minSegments.filter(part => /\*\/\d/g.test(part));
       const restMins = minSegments.filter(part => !/\*\/\d/g.test(part));

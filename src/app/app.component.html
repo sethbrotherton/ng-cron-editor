@@ -1,6 +1,6 @@
 <div>
   <mat-toolbar class="toolbar">
-    <span>Angular Material Cron Demo</span>
+    <span>Angular Material Cron Editor Demo</span>
   </mat-toolbar>
   <div fxLayout="column" fxLayoutAlign="center center">
     <h3>Cron Settings</h3>
@@ -18,17 +18,19 @@
         (change)="updateSetting($event, setting)"
       >{{setting}}</mat-checkbox>
     </div>
+    <br>
     <div fxLayout="row" fxLayoutAlign="center center">
       <mat-form-field>
         <mat-label>Default Cron</mat-label>
-        <input matInput [value]="cronOptions.defaultCron" #defaultCron>
+        <input matInput [value]="cronOptions.defaultCron" [disabled]="true" #defaultCron>
       </mat-form-field>
     </div>
     <mat-cron-editor
       (cronEvent)="showCron($event)"
       [cronOptions]="cronOptions"
     ></mat-cron-editor>
-    <h1>{{resultingCron}}</h1>
+    <br>
+    <h2>Resulting Cron: {{resultingCron}}</h2>
   </div>
 </div>
 
