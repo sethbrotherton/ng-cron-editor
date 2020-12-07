@@ -1,24 +1,55 @@
-# MaterialCronJobs
+# Material Cron Editor
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.4.
+This package is intended to facilitate the formatting of cron formatted strings, using Angular and Angular Material.  
+This is implemented using Angular's ReactiveFormsModule.
+Standard cron formats are supported as shown [here](https://crontab.guru/)
 
-## Code scaffolding
+# Dependencies
 
-Run `ng generate component component-name --project material-cron-jobs` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project material-cron-jobs`.
-> Note: Don't forget to add `--project material-cron-jobs` or else it will be added to the default project in your `angular.json` file. 
+- Angular 10.1.4
+- Angular Material 10.2.3
 
-## Build
+# Installation
 
-Run `ng build material-cron-jobs` to build the project. The build artifacts will be stored in the `dist/` directory.
+`npm install mat-cron-editor`
 
-## Publishing
+# Usage
 
-After building your library with `ng build material-cron-jobs`, go to the dist folder `cd dist/material-cron-jobs` and run `npm publish`.
+To configure the `MatCronEditor` component, one must declare a variable of type `CronOptionsInterface`.
 
-## Running unit tests
+For example: 
+``` ts
+cronOptions: CronOptionsInterface = {
+    includeMinutes: true,
+    includeHours: true,
+    includeDates: true,
+    includeMonths: true,
+    includeDays: true,
+    includeMinutesBetween: true,
+    includeHoursBetween: true,
+    includeDaysBetween: true,
+    includeMonthsBetween: true,
+    includeDatesBetween: true,
+    showHints: true,
+    defaultCron: '0 0 1 1 *',
+    flexDirection: 'row'
+  };
+```
 
-Run `ng test material-cron-jobs` to execute the unit tests via [Karma](https://karma-runner.github.io).
+In your `.html` file you may now use the component as follows:
+```angular2html
+<mat-cron-editor
+  [cronOptions]="cronOptions"
+  (cronEvent)="showCron($event)">
+</mat-cron-editor>
+```
 
-## Further help
+The `defaultCron` property will automatically set the values of the 'included' fields, if valid.
+The `cronEvent` emits an object with `cronForm`(the entire FormGroup so that user can make any additional manipulations as desired) and `cronValue`(the formatted cron value resulting from the form control values).
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+For example, accessing this emitted value we can set an instance variable each time the form values are changed, like so:
+```ts
+showCron(event): void {
+    this.resultingCron = event.cronValue;
+  }
+```
