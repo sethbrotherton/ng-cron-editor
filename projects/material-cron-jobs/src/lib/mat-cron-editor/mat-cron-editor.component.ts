@@ -68,11 +68,11 @@ export class MatCronEditorComponent implements OnInit, OnDestroy {
       daysBetweenCronControl: new FormControl(''),
       monthsBetweenCronControl: new FormControl(''),
 
-      minutesCronControl: new FormControl(''),
-      hoursCronControl: new FormControl(''),
-      datesCronControl: new FormControl(''),
-      monthsCronControl: new FormControl(''),
-      daysCronControl: new FormControl('')
+      minutesCronControl: new FormControl([]),
+      hoursCronControl: new FormControl([]),
+      datesCronControl: new FormControl([]),
+      monthsCronControl: new FormControl([]),
+      daysCronControl: new FormControl([])
     });
     this.setControlValues();
 
