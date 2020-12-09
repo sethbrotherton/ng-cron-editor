@@ -1,6 +1,16 @@
 .toolbar {
   background: #3f51b5;
   color: aliceblue;
+  button {
+    margin: 0 15px;
+  }
+  a:visited {
+    color: inherit;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
 }
 
 mat-label {
@@ -8,4 +18,17 @@ mat-label {
 }
 .mat-radio-button, .mat-checkbox {
   margin: 0 0.5rem;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  align-items: center;
+  .row {
+    flex: 1 1 0;
+    margin: 0.5rem 0.25rem;
+  }
 }

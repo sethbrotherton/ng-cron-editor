@@ -2,7 +2,10 @@
 
 This package is intended to facilitate the formatting of cron formatted strings, using Angular and Angular Material.  
 This is implemented using Angular's ReactiveFormsModule.
-Standard cron formats are supported as shown [here](https://crontab.guru/)
+
+A working demo of this component can be seen [here](http://cron-editor-demo.s3-website-us-east-1.amazonaws.com/)
+
+Standard cron formats are supported as exemplified [here](https://crontab.guru/)
 
 # Dependencies
 
@@ -17,7 +20,7 @@ Standard cron formats are supported as shown [here](https://crontab.guru/)
 
 To configure the `MatCronEditor` component, one must declare a variable of type `CronOptionsInterface`.
 
-For example: 
+For example:
 ``` ts
 cronOptions: CronOptionsInterface = {
     includeMinutes: true,
@@ -50,6 +53,6 @@ The `cronEvent` emits an object with `cronForm`(the entire FormGroup so that use
 For example, accessing this emitted value we can set an instance variable each time the form values are changed, like so:
 ```ts
 showCron(event): void {
-    this.resultingCron = event.cronValue;
-  }
+  this.resultingCron = event.cronValue;
+}
 ```

@@ -1,18 +1,26 @@
 <div>
   <mat-toolbar class="toolbar">
     <span>Angular Material Cron Editor Demo</span>
+    <span class="spacer"></span>
+    <button mat-icon-button>
+      <a href="https://www.npmjs.com/package/mat-cron-editor"><fa-icon [icon]="faNpm" size="3x"></fa-icon></a>
+    </button>
+    <button mat-icon-button>
+      <a href="https://github.com/sethbrotherton/ng-cron-editor"><fa-icon [icon]="faGithub" size="3x"></fa-icon></a>
+    </button>
   </mat-toolbar>
-  <div fxLayout="column" fxLayoutAlign="center center">
-    <h3>Cron Settings</h3>
-    <div fxLayout="row" fxLayoutAlign="center center">
+  <div class="flex-container">
+    <h3>Cron Editor Options</h3>
+    <div class="row">
       <mat-checkbox
         *ngFor="let setting of otherSettings"
         [checked]="cronOptions[setting]"
         (change)="updateSetting($event, setting)"
       >{{setting}}</mat-checkbox>
     </div>
-    <div fxLayout="row" fxLayoutAlign="center center">
+    <div class="row">
       <mat-checkbox
+        class="spacer"
         *ngFor="let setting of betweenSettings"
         [checked]="cronOptions[setting]"
         (change)="updateSetting($event, setting)"

@@ -1,6 +1,8 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CronOptionsInterface} from '../../projects/material-cron-jobs/src/lib/models.model';
 import {MatCheckboxChange} from '@angular/material/checkbox';
+import { faNpm } from '@fortawesome/free-brands-svg-icons/faNpm';
+import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,8 @@ import {MatCheckboxChange} from '@angular/material/checkbox';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  faNpm = faNpm;
+  faGithub = faGithub;
   hourlyCron: string;
   cronOptions: CronOptionsInterface = {
     includeMinutes: true,
